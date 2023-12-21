@@ -1,0 +1,122 @@
+body {
+    margin: 0;
+    background-color: #888;
+    font-family: 'Roboto', sans-serif;
+}
+
+#background {
+    width: 800px;
+    height: 480px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    margin: auto;
+    background-color: rgb(230, 226, 40);
+}
+
+
+#artikelList {
+    position: absolute;
+    width: 385px;
+    height: 460px;
+
+    top: 10px;
+    left: 405px;
+
+    margin: auto;
+    overflow: auto;
+    border-radius: 10px;
+    background-color: #bfff0e;
+}
+
+#artikelBild {
+    position: absolute;
+    width: 385px;
+    height: 300px;
+
+    top: 170px;
+    left: 10px;
+
+    margin: auto;
+    overflow: auto;
+    border-radius: 10px;
+    background-color: #bfff0e;
+}
+
+
+
+
+
+/* ID Suche **/
+#search-container-id {
+    position: absolute;
+    width: 400px;
+    height: 20px;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    gap: 10px;
+    font-weight: bold;
+}
+
+/* RFID_TAG Suchen */
+#search-container-rfid {
+    position: absolute;
+    width: 400px;
+    height: 20px;
+    top: 50px;
+    left: 10px;
+    display: flex;
+    gap: 10px;
+    font-weight: bold;
+}
+
+/* Gewicht Eingeben Suche */
+#entry-container-weight {
+    position: absolute;
+    width: 400px;
+    height: 20px;
+    top: 90px;
+    left: 10px;
+    display: flex;
+    gap: 10px;
+    font-weight: bold;
+}
+
+/* Speichern */
+#entry-container-speichern {
+    position: absolute;
+    width: 400px;
+    height: 20px;
+    top: 130px;
+    left: 285px;
+    display: flex;
+    gap: 10px;
+    font-weight: bold;
+}
+
+label {
+    display: inline-block;
+    width: 150px;
+    height: 20px;
+    text-align: right;
+    margin-right: 10px;
+}
+
+input {
+    width: 80px;
+    height: 15px;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+button {
+    width: 80px;
+    height: 30px;
+
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+}

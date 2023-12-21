@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meine Webseite</title>
+
+
+    <link rel="stylesheet" href="./styles.css" />
+
+
+</head>
+
+<body>
+
+    <div id="background">
+
+    </div>
+
+    <!--Artikel Liste-->
+    <div id="artikelList">
+        <!--<button id="button">Klick mich!</button>-->
+        <table id="jsonTable"></table>
+    </div>
+
+    <!--Artikel Bild-->
+    <div id="artikelBild">
+
+        <table id="jsonBild"></table>
+    </div>
+
+    <!--ID Suche-->
+    <div id="search-container-id">
+        <label for="idInput">ID eingeben:</label>
+        <input type="text" id="idInput">
+        <button id="searchButtonID">Suchen</button>
+        <table id="resultTable"></table>
+    </div>
+
+    <!--RFID Suche-->
+    <div id="search-container-rfid">
+        <label for="rfidInput">RFID_TAG eingeben:</label>
+        <input type="text" id="rfidInput">
+        <button id="searchButtonRFID">Suchen</button>
+        <table id="resultTable"></table>
+    </div>
+
+    <!-- Gewicht Eingeben Suche-->
+    <div id="entry-container-weight">
+        <label for="weightInput">Gewicht eingeben:</label>
+        <input type="text" id="weightInput">
+        <button id="entryButtonWeight">Eingebe</button>
+    </div>
+
+    <!-- Gewicht Eingeben Suche-->
+    <div id="entry-container-speichern">
+        <button id="saveButtonID">Speichern</button>
+    </div>
+
+
+    <script src="main.js"></script> <!--Verlinkt die JavaScript-Datei -->
+</body>
+
+</html>
