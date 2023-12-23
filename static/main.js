@@ -108,7 +108,49 @@ document
     }
   });
 
-// Funktion zum Anzeigen eines JSON-Eintrags in einer Tabelle
+
+// Speichert den Eintrag in der Datenbank
+document
+  .getElementById('saveButtonID')
+  .addEventListener('click', function () {
+    // Datum erstellen
+    // Aktuelles Datum und Uhrzeit erhalten
+    let dateTime = new Date();
+
+    // Datum formatieren
+    let tag = dateTime.getDate();
+    let monat = dateTime.getMonth() + 1; // Monate beginnen bei 0, daher +1
+    let jahr = dateTime.getFullYear();
+
+    // Uhrzeit formatieren
+    let stunde = dateTime.getHours();
+    let minute = dateTime.getMinutes();
+    let sekunde = dateTime.getSeconds();
+
+    // Führende Nullen hinzufügen, wenn nötig
+    tag = (tag < 10) ? '0' + tag : tag;
+    monat = (monat < 10) ? '0' + monat : monat;
+    stunde = (stunde < 10) ? '0' + stunde : stunde;
+    minute = (minute < 10) ? '0' + minute : minute;
+    sekunde = (sekunde < 10) ? '0' + sekunde : sekunde;
+
+    // String erstellen
+    let dateModified = tag + '.' + monat + '.' + jahr + ' ' + stunde + ':' + minute + ':' + sekunde;
+
+    Artikel.Datum_Geändert = dateModified;
+
+    if (Artikel) {
+        // Rufe die Funktion auf, um den gefundenen Eintrag als Tabelle anzuzeigen
+        displayJsonEntryAsTable(Artikel);
+        displayImageAsTable(Artikel);
+      } else {
+        console.log('Fehler beim Speichern des Artikels');
+      }
+
+  });
+
+
+// Funktion zum Anzeigen des Bildes in der Tabelle
 function displayImageAsTable(entry) {
   let bildElement = document.getElementById('jsonBild');
 
