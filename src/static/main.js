@@ -1,7 +1,7 @@
 // Ausgelesenen Artikel
 let Artikel;
 // Pfad zum Bilderverzeichnis
-let Pfad = '../src/PNG/';
+let Pfad = '../PNG/';
 
 // Funktion zum Anzeigen eines JSON-Eintrags in einer Tabelle
 function displayJsonEntryAsTable(entry) {
@@ -158,6 +158,8 @@ function displayImageAsTable(entry) {
   while (bildElement.firstChild) {
     bildElement.removeChild(bildElement.firstChild);
   }
+
+  console.log(Pfad + Artikel.Foto_ID);
 
   var bildArtikel = createImage(Pfad + Artikel.Foto_ID, 'Foto Artikel');
   var bildZeichnung = createImage(
