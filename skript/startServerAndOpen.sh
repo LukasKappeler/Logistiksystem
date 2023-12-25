@@ -5,7 +5,7 @@ LOGISTIKSYSTEM_DIR="/home/lukas/Logistiksystem/Logistiksystem"
 
 # Starte den Yarn-Server
 cd "$LOGISTIKSYSTEM_DIR"
-yarn server &
+yarn start &
 
 # Warte kurz, um sicherzustellen, dass der Server gestartet wurde (kann angepasst werden)
 sleep 5
