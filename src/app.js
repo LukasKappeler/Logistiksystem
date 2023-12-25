@@ -1,108 +1,50 @@
 import express from 'express';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import path from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-import path from 'path'; // Add this line
+  
+// Mongo DB
+const url = 'mongodb+srv://wlwProjekt:E-_xiV$9QCUnadP@inventar1.dmggykc.mongodb.net/';
+const dbName = 'InventarListe_v1';
 
-const app = express();
+export async function connectAndFind(key, value) {
+    const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
 
-app.use(express.static(path.join(__dirname + '/static')));
+    try {
+        await client.connect();
+        console.log('Verbindung zur Datenbank hergestellt');
 
-app.listen(3000, () => {
-    console.log("App listener on port 3000");
-});
+        const db = client.db(dbName);
+        const collection = db.collection('DEINE_COLLECTION_NAME');
 
+        // Suche nach dem gewünschten Schlüssel-Wert-Paar
+        const query = { [key]: value };
+        const result = await collection.findOne(query);
 
+        if (result) {
+            console.log('Gefundenes Objekt:', result);
+            return result; // Gib das gefundene Objekt zurück
+        } else {
+            console.log('Objekt nicht gefunden');
+            return null; // Gib null zurück, wenn das Objekt nicht gefunden wurde
+        }
+    } finally {
+        await client.close();
+        console.log('Verbindung geschlossen');
+    }
+}
+  
 
+  const app = express();
 
-/*
-import express from 'express';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const app = express();
-const port = 3000;
-
-// Definiere das Verzeichnis für statische Dateien
-const staticPath = dirname(fileURLToPath(import.meta.url));
-
-// Benutzerdefinierte Middleware, um den Dateinamen zu ändern
-app.use((req, res, next) => {
-  const fileName = 'terminal.html';
-
-  // Setze den Dateinamen manuell für jede Anfrage
-  req.url = `/${fileName}`;
-
-  next();
-});
-
-// Verwende das statische Verzeichnis
-app.use(express.static(staticPath));
-
-// Starte den Server
-app.listen(port, () => {
-  console.log(`Server läuft auf http://localhost:${port}`);
-});
-*/
+  app.use(express.static(path.join(__dirname + '/static')));
+  
+  app.listen(3000, () => {
+      console.log("App listener on port 3000");
+  });
 
 
-
-
-
-/* Original 
-
-import express from 'express';
-
-const app = express();
-const port = 3000;
-
-
-// Globale Variable, um Befehle im Speicher zu halten
-const commands = [
-  {
-    name: 'ls',
-    desc: 'lists files'
-  },
-  {
-    name: 'pwd',
-    desc: 'prints working directory'
-  }
-  // Fügen Sie hier weitere Befehle hinzu, falls erforderlich
-];
-
-app.get('/', (req, res) => {
-  res.send('hello');
-});
-
-// Neuer GET-Endpoint für Befehle
-app.get('/api/commands', (req, res) => {
-  res.json(commands);
-});
-
-// Neuer POST-Endpoint für das Hinzufügen von Befehlen
-app.post('/api/add-command', (req, res) => {
-  const newCommand = req.body;
-
-  // Überprüfen, ob der neue Befehl die erwartete Struktur hat
-  if (!newCommand || !newCommand.name || !newCommand.desc) {
-    return res
-      .status(400)
-      .json({ status: 'error', message: 'Invalid command format' });
-  }
-
-  // Befehl dem Array hinzufügen
-  commands.push(newCommand);
-
-  res.json({ status: 'ok' });
-});
-
-app.listen(port, () => {
-  console.log(`Linux Commands available on ${port}`);
-});
-*/

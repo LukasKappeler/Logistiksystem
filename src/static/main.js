@@ -3,6 +3,9 @@ let Artikel;
 // Pfad zum Bilderverzeichnis
 let Pfad = '../PNG/';
 
+// Importiere die Funktion connectAndFind
+//import { connectAndFind } from '../app.js';
+
 // Funktion zum Anzeigen eines JSON-Eintrags in einer Tabelle
 function displayJsonEntryAsTable(entry) {
   let tableElement = document.getElementById('jsonTable');
@@ -29,12 +32,43 @@ function displayJsonEntryAsTable(entry) {
   }
 }
 
+
+
+
+  document
+  .getElementById('searchButtonRFID')
+  .addEventListener('click', async function () {
+     // Hole den eingegebenen RFID_KEY
+     let rfidInput = document.getElementById('rfidInput').value;
+
+    (async () => {
+      // Rufe die Funktion auf, um nach dem RFID_KEY in der Datenbank zu suchen
+      const gefundenesObjekt = await connectAndFind('RFID_KEY', rfidInput);
+
+      if (gefundenesObjekt) {
+        // Hier kannst du mit dem gefundenen Objekt weiterarbeiten
+      console.log('Objekt gefunden:', gefundenesObjekt);
+
+      // Füge hier den Code hinzu, um das gefundene Objekt in der Tabelle anzuzeigen
+      displayJsonEntryAsTable(gefundenesObjekt);
+      displayImageAsTable(gefundenesObjekt);
+      } else {
+        console.log('Objekt nicht gefunden.');
+      }
+    })();
+  });
+
+
+/*
 // Füge einen Event Listener zum Suchen-Button hinzu
 document
   .getElementById('searchButtonRFID')
   .addEventListener('click', function () {
     // Hole den eingegebenen RFID_TAG
     let rfidInput = document.getElementById('rfidInput').value;
+
+
+
 
     // Lade das JSON-Objekt von der externen Datei
     fetch('Logistikdatenbank_Artikel.json')
@@ -58,6 +92,7 @@ document
         console.error('Fehler beim Laden der JSON-Datei:', error)
       );
   });
+*/
 
 // Füge einen Event Listener zum Suchen-Button hinzu
 document
@@ -180,3 +215,18 @@ function createImage(src, alt) {
   //img.height = 200; // Höhe des Bildes
   return img;
 }
+
+
+
+// Suche in der Datenbank
+async function sucheInDatenbank() {
+    try {
+      const response = await fetch('http://localhost:3000/suche');
+      const data = await response.json();
+
+      // Verarbeite die Daten und zeige sie auf der Webseite an
+      document.getElementById('ergebnis').textContent = JSON.stringify(data, null, 2);
+    } catch (error) {
+      console.error('Fehler bei der Datenbankabfrage:', error);
+    }
+  }
