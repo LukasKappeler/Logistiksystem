@@ -3,8 +3,6 @@ let Artikel;
 // Pfad zum Bilderverzeichnis
 let Pfad = "../PNG/";
 
-// Importiere die Funktion runReadData
-//import runReadData from '../app.js';
 
 // Funktion zum Anzeigen eines JSON-Eintrags in einer Tabelle
 function displayJsonEntryAsTable(entry) {
@@ -37,8 +35,9 @@ document
     .getElementById("searchButtonRFID")
     .addEventListener("click", function () {
         // Hole den eingegebenen RFID_TAG
-        let rfidInput = document.getElementById("rfidInput").value;
+        let rfidInput = parseInt(document.getElementById("rfidInput").value, 10);
 
+        console.log(rfidInput);
         // Lade das JSON-Objekt von der externen Datei
         fetch("Logistikdatenbank_Artikel.json")
             .then((response) => response.json())
@@ -68,6 +67,15 @@ document
     .addEventListener("click", function () {
         // Hole den eingegebenen RFID_TAG
         let idInput = document.getElementById("idInput").value;
+
+        fetch('http://localhost:3000/daten')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Daten vom Server:', data);
+                // Hier kannst du die erhaltenen Daten weiterverarbeiten
+            })
+            .catch(error => console.error('Fehler beim Abrufen der Daten:', error));
+
 
         // Lade das JSON-Objekt von der externen Datei
         fetch("Logistikdatenbank_Artikel.json")
@@ -190,19 +198,6 @@ function createImage(src, alt) {
     return img;
 }
 
-// Suche in der Datenbank
-async function sucheInDatenbank() {
-    try {
-        const response = await fetch("http://localhost:3000/suche");
-        const data = await response.json();
 
-        // Verarbeite die Daten und zeige sie auf der Webseite an
-        document.getElementById("ergebnis").textContent = JSON.stringify(
-            data,
-            null,
-            2
-        );
-    } catch (error) {
-        console.error("Fehler bei der Datenbankabfrage:", error);
-    }
-}
+
+

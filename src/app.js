@@ -19,6 +19,7 @@ app.listen(3000, () => {
 
 
 
+
 // Mongo DB
 // ----------------------------------------------------------------
 
@@ -30,9 +31,9 @@ const collectionName = 'Liste1'; // Sammlungsname
 // Beispielaufruf mit den aktualisierten Daten
 const newData = {
     "ID": 10001005,
-    "RFID_TAG": 1,
-    "Datum_Erstellt": "11.11.2000 11:28",
-    "Datum_Geändert": "11.09.2023 11:28",
+    "RFID_TAG": 5,
+    "Datum_Erstellt": "01.11.2000 11:28",
+    "Datum_Geaendert": "22.09.2023 11:28",
     "Lager_Ort": "Balsthal",
     "Lager_Platz": "Schrank 03",
     "Lager_Position": "A05",
@@ -133,4 +134,15 @@ async function fetchDataFromDatabase(client,value) {
     console.log(result);
 }
 
+
+// Abfrage von Daten
+app.get('/daten', (req, res) => {
+    // Hier könntest du Daten aus einer Datenbank oder anderer Quelle abrufen
+     
+    const daten = {};
+    runReadData(12345678).catch(daten);
+    
+    // Daten an den Client senden
+    res.json(daten);
+  });
 

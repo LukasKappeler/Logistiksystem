@@ -19,7 +19,7 @@
   },
   {
     "ID": 10001001,
-    "RFID_TAG": 12345679,
+    "RFID_TAG": 13436300,
     "Datum_Erstellt": "10.09.2023 11:28",
     "Datum_Geändert": "10.09.2023 11:28",
     "Lager_Ort": "Balsthal",
@@ -37,7 +37,7 @@
   },
   {
     "ID": 10001002,
-    "RFID_TAG": 12345680,
+    "RFID_TAG": 13436300,
     "Datum_Erstellt": "10.09.2023 11:28",
     "Datum_Geändert": "10.09.2023 11:28",
     "Lager_Ort": "Balsthal",
@@ -55,7 +55,7 @@
   },
   {
     "ID": 10001003,
-    "RFID_TAG": 1,
+    "RFID_TAG": 12592651,
     "Datum_Erstellt": "10.09.2023 11:28",
     "Datum_Geändert": "10.09.2023 11:28",
     "Lager_Ort": "Balsthal",
@@ -87,7 +87,7 @@
   },
   {
     "ID": 10001004,
-    "RFID_TAG": 12345682,
+    "RFID_TAG": 12798828,
     "Datum_Erstellt": "10.09.2023 11:28",
     "Datum_Geändert": "10.09.2023 11:28",
     "Lager_Ort": "Balsthal",
