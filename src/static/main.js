@@ -1,153 +1,122 @@
 // Ausgelesenen Artikel
 let Artikel;
 // Pfad zum Bilderverzeichnis
-let Pfad = '../PNG/';
+let Pfad = "../PNG/";
 
 // Importiere die Funktion connectAndFind
-//import { connectAndFind } from '../app.js';
+//import { connectAndFind } from "../app.js";
+//const app = require("../app.js");
+
+//import * as app from "../app.js";
+//import { connectAndFind } from "../app.js";
 
 // Funktion zum Anzeigen eines JSON-Eintrags in einer Tabelle
 function displayJsonEntryAsTable(entry) {
-  let tableElement = document.getElementById('jsonTable');
+    let tableElement = document.getElementById("jsonTable");
 
-  // Lösche vorhandene Zeilen in der Tabelle
-  while (tableElement.rows.length > 0) {
-    tableElement.deleteRow(0);
-  }
+    // Lösche vorhandene Zeilen in der Tabelle
+    while (tableElement.rows.length > 0) {
+        tableElement.deleteRow(0);
+    }
 
-  // Erstelle eine Zeile für jeden Schlüssel-Wert-Eintrag
-  for (let key in entry) {
-    let row = tableElement.insertRow();
+    // Erstelle eine Zeile für jeden Schlüssel-Wert-Eintrag
+    for (let key in entry) {
+        let row = tableElement.insertRow();
 
-    // Erstelle Zellen für Schlüssel und Wert
-    let keyCell = row.insertCell(0);
-    let valueCell = row.insertCell(1);
+        // Erstelle Zellen für Schlüssel und Wert
+        let keyCell = row.insertCell(0);
+        let valueCell = row.insertCell(1);
 
-    // Setze Schlüssel und Wert in die Zellen
-    keyCell.textContent = key;
-    valueCell.textContent = entry[key];
-    // Macht den Text der 1. Zeile Bold
-    keyCell.style.fontWeight = 'bold';
-    keyCell.style.width = '150px';
-  }
+        // Setze Schlüssel und Wert in die Zellen
+        keyCell.textContent = key;
+        valueCell.textContent = entry[key];
+        // Macht den Text der 1. Zeile Bold
+        keyCell.style.fontWeight = "bold";
+        keyCell.style.width = "150px";
+    }
 }
 
-
-
-
-  document
-  .getElementById('searchButtonRFID')
-  .addEventListener('click', async function () {
-     // Hole den eingegebenen RFID_KEY
-     let rfidInput = document.getElementById('rfidInput').value;
-
-    (async () => {
-      // Rufe die Funktion auf, um nach dem RFID_KEY in der Datenbank zu suchen
-      const gefundenesObjekt = await connectAndFind('RFID_KEY', rfidInput);
-
-      if (gefundenesObjekt) {
-        // Hier kannst du mit dem gefundenen Objekt weiterarbeiten
-      console.log('Objekt gefunden:', gefundenesObjekt);
-
-      // Füge hier den Code hinzu, um das gefundene Objekt in der Tabelle anzuzeigen
-      displayJsonEntryAsTable(gefundenesObjekt);
-      displayImageAsTable(gefundenesObjekt);
-      } else {
-        console.log('Objekt nicht gefunden.');
-      }
-    })();
-  });
-
-
-/*
 // Füge einen Event Listener zum Suchen-Button hinzu
 document
-  .getElementById('searchButtonRFID')
-  .addEventListener('click', function () {
-    // Hole den eingegebenen RFID_TAG
-    let rfidInput = document.getElementById('rfidInput').value;
+    .getElementById("searchButtonRFID")
+    .addEventListener("click", function () {
+        // Hole den eingegebenen RFID_TAG
+        let rfidInput = document.getElementById("rfidInput").value;
 
+        // Lade das JSON-Objekt von der externen Datei
+        fetch("Logistikdatenbank_Artikel.json")
+            .then((response) => response.json())
+            .then((data) => {
+                // Suche nach dem Eintrag mit dem entsprechenden RFID_TAG
+                Artikel = data.find((entry) => entry.RFID_TAG == rfidInput);
 
-
-
-    // Lade das JSON-Objekt von der externen Datei
-    fetch('Logistikdatenbank_Artikel.json')
-      .then((response) => response.json())
-      .then((data) => {
-        // Suche nach dem Eintrag mit dem entsprechenden RFID_TAG
-        Artikel = data.find((entry) => entry.RFID_TAG == rfidInput);
-
-        if (Artikel) {
-          // Rufe die Funktion auf, um den gefundenen Eintrag als Tabelle anzuzeigen
-          displayJsonEntryAsTable(Artikel);
-          displayImageAsTable(Artikel);
-          console.log(Artikel);
-        } else {
-          console.log(
-            'Eintrag mit RFID_TAG ' + rfidInput + ' wurde nicht gefunden.'
-          );
-        }
-      })
-      .catch((error) =>
-        console.error('Fehler beim Laden der JSON-Datei:', error)
-      );
-  });
-*/
+                if (Artikel) {
+                    // Rufe die Funktion auf, um den gefundenen Eintrag als Tabelle anzuzeigen
+                    displayJsonEntryAsTable(Artikel);
+                    displayImageAsTable(Artikel);
+                    console.log(Artikel);
+                } else {
+                    console.log(
+                        "Eintrag mit RFID_TAG " + rfidInput + " wurde nicht gefunden."
+                    );
+                }
+            })
+            .catch((error) =>
+                console.error("Fehler beim Laden der JSON-Datei:", error)
+            );
+    });
 
 // Füge einen Event Listener zum Suchen-Button hinzu
 document
-  .getElementById('searchButtonID')
-  .addEventListener('click', function () {
-    // Hole den eingegebenen RFID_TAG
-    let idInput = document.getElementById('idInput').value;
+    .getElementById("searchButtonID")
+    .addEventListener("click", function () {
+        // Hole den eingegebenen RFID_TAG
+        let idInput = document.getElementById("idInput").value;
 
-    // Lade das JSON-Objekt von der externen Datei
-    fetch('Logistikdatenbank_Artikel.json')
-      .then((response) => response.json())
-      .then((data) => {
-        // Suche nach dem Eintrag mit dem entsprechenden RFID_TAG
-        Artikel = data.find((entry) => entry.ID == idInput);
+        // Lade das JSON-Objekt von der externen Datei
+        fetch("Logistikdatenbank_Artikel.json")
+            .then((response) => response.json())
+            .then((data) => {
+                // Suche nach dem Eintrag mit dem entsprechenden RFID_TAG
+                Artikel = data.find((entry) => entry.ID == idInput);
 
-        if (Artikel) {
-          // Rufe die Funktion auf, um den gefundenen Eintrag als Tabelle anzuzeigen
-          displayJsonEntryAsTable(Artikel);
-          displayImageAsTable(Artikel);
-        } else {
-          console.log(
-            'Eintrag mit RFID_TAG ' + idInput + ' wurde nicht gefunden.'
-          );
-        }
-      })
-      .catch((error) =>
-        console.error('Fehler beim Laden der JSON-Datei:', error)
-      );
-  });
+                if (Artikel) {
+                    // Rufe die Funktion auf, um den gefundenen Eintrag als Tabelle anzuzeigen
+                    displayJsonEntryAsTable(Artikel);
+                    displayImageAsTable(Artikel);
+                } else {
+                    console.log(
+                        "Eintrag mit RFID_TAG " + idInput + " wurde nicht gefunden."
+                    );
+                }
+            })
+            .catch((error) =>
+                console.error("Fehler beim Laden der JSON-Datei:", error)
+            );
+    });
 
 // Füge einen Event Listener zum Gewichts-Button hinzu
 document
-  .getElementById('entryButtonWeight')
-  .addEventListener('click', function () {
-    // Hole den eingegebenen RFID_TAG
-    let gewicht = document.getElementById('weightInput').value;
+    .getElementById("entryButtonWeight")
+    .addEventListener("click", function () {
+        // Hole den eingegebenen RFID_TAG
+        let gewicht = document.getElementById("weightInput").value;
 
-    // Schreibt das neue Gewicht in den Artikel
-    Artikel.Anzahl_Artikel =
-      (gewicht - Artikel.Gewicht_Behälter) / Artikel.Gewicht_Artikel;
+        // Schreibt das neue Gewicht in den Artikel
+        Artikel.Anzahl_Artikel =
+            (gewicht - Artikel.Gewicht_Behälter) / Artikel.Gewicht_Artikel;
 
-    if (Artikel) {
-      // Rufe die Funktion auf, um den gefundenen Eintrag als Tabelle anzuzeigen
-      displayJsonEntryAsTable(Artikel);
-      displayImageAsTable(Artikel);
-    } else {
-      console.log('Eintrag mit RFID_TAG ' + gewicht + ' wurde nicht gefunden.');
-    }
-  });
-
+        if (Artikel) {
+            // Rufe die Funktion auf, um den gefundenen Eintrag als Tabelle anzuzeigen
+            displayJsonEntryAsTable(Artikel);
+            displayImageAsTable(Artikel);
+        } else {
+            console.log("Eintrag mit RFID_TAG " + gewicht + " wurde nicht gefunden.");
+        }
+    });
 
 // Speichert den Eintrag in der Datenbank
-document
-  .getElementById('saveButtonID')
-  .addEventListener('click', function () {
+document.getElementById("saveButtonID").addEventListener("click", function () {
     // Datum erstellen
     // Aktuelles Datum und Uhrzeit erhalten
     let dateTime = new Date();
@@ -163,14 +132,25 @@ document
     let sekunde = dateTime.getSeconds();
 
     // Führende Nullen hinzufügen, wenn nötig
-    tag = (tag < 10) ? '0' + tag : tag;
-    monat = (monat < 10) ? '0' + monat : monat;
-    stunde = (stunde < 10) ? '0' + stunde : stunde;
-    minute = (minute < 10) ? '0' + minute : minute;
-    sekunde = (sekunde < 10) ? '0' + sekunde : sekunde;
+    tag = tag < 10 ? "0" + tag : tag;
+    monat = monat < 10 ? "0" + monat : monat;
+    stunde = stunde < 10 ? "0" + stunde : stunde;
+    minute = minute < 10 ? "0" + minute : minute;
+    sekunde = sekunde < 10 ? "0" + sekunde : sekunde;
 
     // String erstellen
-    let dateModified = tag + '.' + monat + '.' + jahr + ' ' + stunde + ':' + minute + ':' + sekunde;
+    let dateModified =
+        tag +
+        "." +
+        monat +
+        "." +
+        jahr +
+        " " +
+        stunde +
+        ":" +
+        minute +
+        ":" +
+        sekunde;
 
     Artikel.Datum_Geändert = dateModified;
 
@@ -178,55 +158,55 @@ document
         // Rufe die Funktion auf, um den gefundenen Eintrag als Tabelle anzuzeigen
         displayJsonEntryAsTable(Artikel);
         displayImageAsTable(Artikel);
-      } else {
-        console.log('Fehler beim Speichern des Artikels');
-      }
-
-  });
-
+    } else {
+        console.log("Fehler beim Speichern des Artikels");
+    }
+});
 
 // Funktion zum Anzeigen des Bildes in der Tabelle
 function displayImageAsTable(entry) {
-  let bildElement = document.getElementById('jsonBild');
+    let bildElement = document.getElementById("jsonBild");
 
-  // Lösche vorhandene Bilder in der Tabelle
-  while (bildElement.firstChild) {
-    bildElement.removeChild(bildElement.firstChild);
-  }
+    // Lösche vorhandene Bilder in der Tabelle
+    while (bildElement.firstChild) {
+        bildElement.removeChild(bildElement.firstChild);
+    }
 
-  console.log(Pfad + Artikel.Foto_ID);
+    console.log(Pfad + Artikel.Foto_ID);
 
-  var bildArtikel = createImage(Pfad + Artikel.Foto_ID, 'Foto Artikel');
-  var bildZeichnung = createImage(
-    Pfad + Artikel.Zeichnung_ID,
-    'Konstruktionszeichnung'
-  );
+    var bildArtikel = createImage(Pfad + Artikel.Foto_ID, "Foto Artikel");
+    var bildZeichnung = createImage(
+        Pfad + Artikel.Zeichnung_ID,
+        "Konstruktionszeichnung"
+    );
 
-  bildElement.append(bildArtikel);
-  bildElement.append(bildZeichnung);
+    bildElement.append(bildArtikel);
+    bildElement.append(bildZeichnung);
 }
 
 // Funktion zum Erstellen eines Bild-Elements
 function createImage(src, alt) {
-  var img = document.createElement('img');
-  img.src = src;
-  img.alt = alt;
-  img.width = 365; // Breite des Bildes
-  //img.height = 200; // Höhe des Bildes
-  return img;
+    var img = document.createElement("img");
+    img.src = src;
+    img.alt = alt;
+    img.width = 365; // Breite des Bildes
+    //img.height = 200; // Höhe des Bildes
+    return img;
 }
-
-
 
 // Suche in der Datenbank
 async function sucheInDatenbank() {
     try {
-      const response = await fetch('http://localhost:3000/suche');
-      const data = await response.json();
+        const response = await fetch("http://localhost:3000/suche");
+        const data = await response.json();
 
-      // Verarbeite die Daten und zeige sie auf der Webseite an
-      document.getElementById('ergebnis').textContent = JSON.stringify(data, null, 2);
+        // Verarbeite die Daten und zeige sie auf der Webseite an
+        document.getElementById("ergebnis").textContent = JSON.stringify(
+            data,
+            null,
+            2
+        );
     } catch (error) {
-      console.error('Fehler bei der Datenbankabfrage:', error);
+        console.error("Fehler bei der Datenbankabfrage:", error);
     }
-  }
+}
