@@ -27,26 +27,6 @@ const uri = 'mongodb+srv://wlwProjekt:E-_xiV$9QCUnadP@inventar1.dmggykc.mongodb.
 const databaseName = 'InventarListe_v1'; // Datenbankname
 const collectionName = 'Liste1'; // Sammlungsname
 
-// Daten, die in die Datenbank eingefügt werden sollen
-const data_to_insert = {
-    "ID": 100019999,
-    "RFID_TAG": 12345678,
-    "Datum_Erstellt": "10.09.2024 11:28",
-    "Datum_Geändert": "10.09.2024 11:28",
-    "Lager_Ort": "Balsthal",
-    "Lager_Platz": "Schrank 02",
-    "Lager_Position": "A03",
-    "Lager_Behälter": "AUER",
-    "Gewicht_Behälter": 8,
-    "Gewicht_Artikel": 10,
-    "Anzahl_Artikel": 129,
-    "Foto_ID": "Schraube.jpg",
-    "Zeichnung_ID": "Schraube.png",
-    "Artikel_Kategorie": "Schraube",
-    "Artikel_Name": "Zylinderschraube mit Innensechskant",
-    "Print_Name": "M3x20",
-};
-
 // Beispielaufruf mit den aktualisierten Daten
 const newData = {
     "ID": 10001005,
@@ -77,24 +57,44 @@ const client = new MongoClient(uri, {
     }
 }
 );
-async function run() {
+
+// Eintrag aktualisieren oder neu Einfügen
+// ---------------------------------------
+async function runWriteData(newData) {
     try {
         // Connect the client to the server (optional starting in v4.7)
         await client.connect();
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
-        // Daten in die MongoDB einfügen
-        //await insertDataIntoDatabase(client, data_to_insert);
+        // Daten in die MongoDB aktualisieren oder einfügen.
         await insertOrUpdateData(client, newData);
-        // Daten aus der MongoDB abrufen und auf der Konsole ausgeben
-        await fetchDataFromDatabase(client);
     } finally {
         // Ensures that the client will close when you finish/error
         await client.close();
     }
 }
 
+
+// Eintrag aus MongoDB auslesen
+// ---------------------------------------
+async function runReadData(rfidValue) {
+    try {
+        // Connect the client to the server (optional starting in v4.7)
+        await client.connect();
+        // Send a ping to confirm a successful connection
+        await client.db("admin").command({ ping: 1 });
+        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+        // Daten aus der MongoDB abrufen und auf der Konsole ausgeben
+        await fetchDataFromDatabase(client,rfidValue);
+    } finally {
+        // Ensures that the client will close when you finish/error
+        await client.close();
+    }
+}
+
+runWriteData(newData).catch(console.dir);
+//runReadData(12345678).catch(console.dir);
 
 // Daten in die MongoDB einfügen oder aktualisieren
 async function insertOrUpdateData(client, newData) {
@@ -116,23 +116,14 @@ async function insertOrUpdateData(client, newData) {
     }
   }
 
-// Daten in die MongoDB einfügen
-async function insertDataIntoDatabase(client, data) {
-    const database = client.db(databaseName);
-    const collection = database.collection(collectionName);
-
-    // Einzelnes Dokument einfügen
-    const result = await collection.insertOne(data);
-    console.log(`Dokument eingefügt mit ID: ${result.insertedId}`);
-}
 
 // Daten aus der MongoDB abrufen und auf der Konsole ausgeben
-async function fetchDataFromDatabase(client) {
+async function fetchDataFromDatabase(client,value) {
     const database = client.db(databaseName);
     const collection = database.collection(collectionName);
 
     // Hier wird nach einem Eintrag mit RFID_KEY = 1 gesucht
-    const query = { RFID_TAG: 12345678 };
+    const query = { RFID_TAG: value };
 
     // Daten abrufen
     const result = await collection.findOne(query);
@@ -142,4 +133,4 @@ async function fetchDataFromDatabase(client) {
     console.log(result);
 }
 
-run().catch(console.dir);
+

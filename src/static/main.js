@@ -3,12 +3,8 @@ let Artikel;
 // Pfad zum Bilderverzeichnis
 let Pfad = "../PNG/";
 
-// Importiere die Funktion connectAndFind
-//import { connectAndFind } from "../app.js";
-//const app = require("../app.js");
-
-//import * as app from "../app.js";
-//import { connectAndFind } from "../app.js";
+// Importiere die Funktion runReadData
+//import runReadData from '../app.js';
 
 // Funktion zum Anzeigen eines JSON-Eintrags in einer Tabelle
 function displayJsonEntryAsTable(entry) {
