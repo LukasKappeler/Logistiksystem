@@ -59,9 +59,10 @@ const client = new MongoClient(uri, {
 
 
 
-// Eintrag aktualisieren oder neu einfügen
-// ---------------------------------------
-async function runWriteData(newData) {
+
+// SAVE-3 Eintrag aktualisieren oder neu einfügen
+// --------------------------------------------------------
+async function runWriteData(data) {
     try {
         // Client mit dem Server verbinden (optional ab v4.7)
         await client.connect();
@@ -69,7 +70,7 @@ async function runWriteData(newData) {
         await client.db("admin").command({ ping: 1 });
         console.log("Ping an Ihre Bereitstellung gesendet. Sie haben erfolgreich eine Verbindung zu MongoDB hergestellt!");
         // Daten in die MongoDB aktualisieren oder einfügen.
-        await insertOrUpdateData(client, newData);
+        await insertOrUpdateData(client, data);
     } finally {
         // Stellt sicher, dass der Client geschlossen wird, wenn Sie fertig sind/fehlschlagen
         await client.close();
@@ -103,24 +104,24 @@ async function runReadDataID(key,id) {
 //runReadDataID(10001005).catch(console.dir);
 
 
-
-// Daten in die MongoDB einfügen oder aktualisieren
-async function insertOrUpdateData(client, newData) {
+// SAVE-4 Daten in die MongoDB einfügen oder aktualisieren
+// --------------------------------------------------------
+async function insertOrUpdateData(client, data) {
     const database = client.db(databaseName);
     const collection = database.collection(collectionName);
 
     // Überprüfen, ob ein Eintrag mit dem angegebenen RFID_TAG vorhanden ist
-    const existingEntry = await collection.findOne({ RFID_TAG: newData.RFID_TAG });
+    const existingEntry = await collection.findOne({ ID: data.ID });
 
     if (existingEntry) {
         // Eintrag aktualisieren, wenn vorhanden
-        newData.Datum_Geändert = new Date().toLocaleString(); // Aktuelles Datum und Uhrzeit aktualisieren
-        const result = await collection.updateOne({ RFID_TAG: newData.RFID_TAG }, { $set: newData });
-        console.log(`Eintrag aktualisiert für RFID_TAG: ${newData.RFID_TAG}`);
+        data.Datum_Geändert = new Date().toLocaleString(); // Aktuelles Datum und Uhrzeit aktualisieren
+        const result = await collection.updateOne({ ID: data.ID }, { $set: data });
+        console.log(`Eintrag aktualisiert für ID: ${data.ID}`);
     } else {
         // Eintrag einfügen, wenn nicht vorhanden
-        const result = await collection.insertOne(newData);
-        console.log(`Neuer Eintrag erstellt für RFID_TAG: ${newData.RFID_TAG}`);
+        const result = await collection.insertOne(data);
+        console.log(`Neuer Eintrag erstellt für RFID_TAG: ${data.ID}`);
     }
 }
 
@@ -149,7 +150,7 @@ async function fetchDataFromDatabaseID(client,key, value) {
 //----------------------------------------------------------
 
 
-// ID-2 Request von Client Suchen in Datenbank mit ID
+// ID-2 Request von Client Suchen in Datenbank mit ID / RFID
 // --------------------------------------------------------
 app.get('/id/:key/:id', async (req, res) => {
     try {
@@ -162,6 +163,25 @@ app.get('/id/:key/:id', async (req, res) => {
 
         // Daten an den Client senden
         res.json(daten);
+    } catch (error) {
+        console.error('Fehler beim Abrufen der Daten mit ID:', error);
+        // Fehler an den Client senden
+        res.status(500).json({ error: 'Interner Serverfehler' });
+    }
+});
+
+// SAVE-2 Speichern des Artikels in der Datenbank
+// --------------------------------------------------------
+app.get('/save/:Artikel', async (req, res) => {
+    try {
+        // Hier könntest du Daten aus einer Datenbank oder anderer Quelle abrufen
+        const artikel = req.params.Artikel;
+  
+        // Daten aus der Datenbank abrufen
+        const daten = await runWriteData(artikel);
+
+        // Daten an den Client senden
+        res.json("OK");
     } catch (error) {
         console.error('Fehler beim Abrufen der Daten mit ID:', error);
         // Fehler an den Client senden

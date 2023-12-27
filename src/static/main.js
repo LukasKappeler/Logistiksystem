@@ -138,6 +138,14 @@ document.getElementById("saveButtonID").addEventListener("click", function () {
         // Rufe die Funktion auf, um den gefundenen Eintrag als Tabelle anzuzeigen
         displayJsonEntryAsTable(Artikel);
         displayImageAsTable(Artikel);
+
+        fetch(`http://localhost:3000/save/${Artikel}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Speichern der Daten war erfolgreich', data);
+        })
+        .catch(error => console.error('Fehler beim Abrufen der Daten:', error));
+
     } else {
         console.log("Fehler beim Speichern des Artikels");
     }
