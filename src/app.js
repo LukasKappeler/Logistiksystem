@@ -11,7 +11,9 @@ const __dirname = dirname(__filename);
 
 const app = express();
 
+
 app.use(express.static(path.join(__dirname + '/static')));
+app.use(express.json());
 
 app.listen(3000, () => {
     console.log("App lauscht auf Port 3000");
@@ -29,9 +31,9 @@ const collectionName = 'Liste1'; // Sammlungsname
 // Beispielaufruf mit den aktualisierten Daten
 const newData = {
     "ID": 10001005,
-    "RFID_TAG": 6,
+    "RFID_TAG": 7,
     "Datum_Erstellt": "01.11.2000 11:28",
-    "Datum_Geaendert": "22.09.2023 11:28",
+    "Datum_Geaendert": "22.09.2023 99:99",
     "Lager_Ort": "Balsthal",
     "Lager_Platz": "Schrank 03",
     "Lager_Position": "A05",
@@ -159,10 +161,11 @@ app.get('/id/:key/:id', async (req, res) => {
         const key = req.params.key;
   
         // Daten aus der Datenbank abrufen
-        const daten = await runReadDataID(key,id);
+        const data = await runReadDataID(key,id);
 
+        delete data._id;
         // Daten an den Client senden
-        res.json(daten);
+        res.json(data);
     } catch (error) {
         console.error('Fehler beim Abrufen der Daten mit ID:', error);
         // Fehler an den Client senden
@@ -170,13 +173,17 @@ app.get('/id/:key/:id', async (req, res) => {
     }
 });
 
+/*
 // SAVE-2 Speichern des Artikels in der Datenbank
 // --------------------------------------------------------
-app.get('/save/:Artikel', async (req, res) => {
+app.post('/save', async (req, res) => {
     try {
         // Hier könntest du Daten aus einer Datenbank oder anderer Quelle abrufen
-        const artikel = req.params.Artikel;
+        const artikel =  req.body;
   
+        console.log("Artikel:");
+        console.log(artikel);
+
         // Daten aus der Datenbank abrufen
         const daten = await runWriteData(artikel);
 
@@ -188,4 +195,27 @@ app.get('/save/:Artikel', async (req, res) => {
         res.status(500).json({ error: 'Interner Serverfehler' });
     }
 });
+*/
 
+// SAVE-2 Speichern des Artikels in der Datenbank
+// --------------------------------------------------------
+app.post('/save', async (req, res) => {
+    try {
+        // Hier könntest du Daten aus einer Datenbank oder anderer Quelle abrufen
+        const artikel = req.body;
+  
+        console.log("Empfangen von Artikel:");
+        console.log(artikel);
+
+        // Daten aus der Datenbank abrufen
+        //await runWriteData(artikel);
+        runWriteData(artikel).catch(console.dir);
+
+        // Daten an den Client senden
+        res.json("OK");
+    } catch (error) {
+        console.error('Fehler beim Abrufen der Daten mit ID:', error);
+        // Fehler an den Client senden
+        res.status(500).json({ error: 'Interner Serverfehler' });
+    }
+});

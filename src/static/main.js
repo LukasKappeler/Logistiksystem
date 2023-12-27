@@ -38,7 +38,9 @@ document
         // Hole den eingegebenen RFID_TAG
         let key = "RFID_TAG"
         let rfidInput = document.getElementById("rfidInput").value;
-        
+
+        // Leere das Eingabefeld nach dem Auslesen
+        document.getElementById("rfidInput").value = "";        
 
         fetch(`http://localhost:3000/id/${key}/${rfidInput}`)
             .then(response => response.json())
@@ -60,7 +62,9 @@ document
         // Hole den eingegebenen ID
         let key = "ID"
         let idInput = document.getElementById("idInput").value;
-        
+
+        // Leere das Eingabefeld nach dem Auslesen
+        document.getElementById("idInput").value = "";
 
         fetch(`http://localhost:3000/id/${key}/${idInput}`)
             .then(response => response.json())
@@ -80,6 +84,9 @@ document
     .addEventListener("click", function () {
         // Hole den eingegebenen RFID_TAG
         let gewicht = document.getElementById("weightInput").value;
+
+        // Leere das Eingabefeld nach dem Auslesen
+        document.getElementById("weightInput").value = "";
 
         // Schreibt das neue Gewicht in den Artikel
         Artikel.Anzahl_Artikel =
@@ -139,12 +146,16 @@ document.getElementById("saveButtonID").addEventListener("click", function () {
         displayJsonEntryAsTable(Artikel);
         displayImageAsTable(Artikel);
 
-        fetch(`http://localhost:3000/save/${Artikel}`)
-        .then(response => response.json())
-        .then(data => {
-            console.log('Speichern der Daten war erfolgreich', data);
+        //console.log("Gesendet Artikel vom Client");
+        //console.log(Artikel);
+
+        fetch('http://localhost:3000/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(Artikel),
         })
-        .catch(error => console.error('Fehler beim Abrufen der Daten:', error));
 
     } else {
         console.log("Fehler beim Speichern des Artikels");
