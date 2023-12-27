@@ -30,73 +30,48 @@ function displayJsonEntryAsTable(entry) {
     }
 }
 
-// Füge einen Event Listener zum Suchen-Button hinzu
+// ID-1 Button Suchen mit RFID_TAG
+// --------------------------------------------------------
 document
     .getElementById("searchButtonRFID")
     .addEventListener("click", function () {
         // Hole den eingegebenen RFID_TAG
-        let rfidInput = parseInt(document.getElementById("rfidInput").value, 10);
+        let key = "RFID_TAG"
+        let rfidInput = document.getElementById("rfidInput").value;
+        
 
-        console.log(rfidInput);
-        // Lade das JSON-Objekt von der externen Datei
-        fetch("Logistikdatenbank_Artikel.json")
-            .then((response) => response.json())
-            .then((data) => {
-                // Suche nach dem Eintrag mit dem entsprechenden RFID_TAG
-                Artikel = data.find((entry) => entry.RFID_TAG == rfidInput);
-
-                if (Artikel) {
-                    // Rufe die Funktion auf, um den gefundenen Eintrag als Tabelle anzuzeigen
-                    displayJsonEntryAsTable(Artikel);
-                    displayImageAsTable(Artikel);
-                    console.log(Artikel);
-                } else {
-                    console.log(
-                        "Eintrag mit RFID_TAG " + rfidInput + " wurde nicht gefunden."
-                    );
-                }
+        fetch(`http://localhost:3000/id/${key}/${rfidInput}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Daten vom Server mit RFID:', data);
+                // Hier kannst du die erhaltenen Daten weiterverarbeiten
+                Artikel = data;
+                displayJsonEntryAsTable(Artikel);
+                displayImageAsTable(Artikel);
             })
-            .catch((error) =>
-                console.error("Fehler beim Laden der JSON-Datei:", error)
-            );
+            .catch(error => console.error('Fehler beim Abrufen der Daten:', error));
     });
 
-// Füge einen Event Listener zum Suchen-Button hinzu
+// ID-1 Button Suchen mit ID
+// --------------------------------------------------------
 document
     .getElementById("searchButtonID")
     .addEventListener("click", function () {
-        // Hole den eingegebenen RFID_TAG
+        // Hole den eingegebenen ID
+        let key = "ID"
         let idInput = document.getElementById("idInput").value;
+        
 
-        fetch('http://localhost:3000/daten')
+        fetch(`http://localhost:3000/id/${key}/${idInput}`)
             .then(response => response.json())
             .then(data => {
-                console.log('Daten vom Server:', data);
+                console.log('Daten vom Server mit ID:', data);
                 // Hier kannst du die erhaltenen Daten weiterverarbeiten
+                Artikel = data;
+                displayJsonEntryAsTable(Artikel);
+                displayImageAsTable(Artikel);
             })
             .catch(error => console.error('Fehler beim Abrufen der Daten:', error));
-
-
-        // Lade das JSON-Objekt von der externen Datei
-        fetch("Logistikdatenbank_Artikel.json")
-            .then((response) => response.json())
-            .then((data) => {
-                // Suche nach dem Eintrag mit dem entsprechenden RFID_TAG
-                Artikel = data.find((entry) => entry.ID == idInput);
-
-                if (Artikel) {
-                    // Rufe die Funktion auf, um den gefundenen Eintrag als Tabelle anzuzeigen
-                    displayJsonEntryAsTable(Artikel);
-                    displayImageAsTable(Artikel);
-                } else {
-                    console.log(
-                        "Eintrag mit RFID_TAG " + idInput + " wurde nicht gefunden."
-                    );
-                }
-            })
-            .catch((error) =>
-                console.error("Fehler beim Laden der JSON-Datei:", error)
-            );
     });
 
 // Füge einen Event Listener zum Gewichts-Button hinzu
@@ -119,7 +94,8 @@ document
         }
     });
 
-// Speichert den Eintrag in der Datenbank
+// SAVE-1 Speichert den Eintrag in der Datenbank
+//---------------------------------------------------------
 document.getElementById("saveButtonID").addEventListener("click", function () {
     // Datum erstellen
     // Aktuelles Datum und Uhrzeit erhalten
