@@ -3,7 +3,6 @@ let Artikel;
 // Pfad zum Bilderverzeichnis
 let Pfad = "../PNG/";
 
-
 // Funktion zum Anzeigen eines JSON-Eintrags in einer Tabelle
 function displayJsonEntryAsTable(entry) {
     let tableElement = document.getElementById("jsonTable");
@@ -39,8 +38,11 @@ document
         let key = "RFID_TAG"
         let rfidInput = document.getElementById("rfidInput").value;
 
+        // Fortschrittsbalken anzeigen
+        showProgressBar();
+
         // Leere das Eingabefeld nach dem Auslesen
-        document.getElementById("rfidInput").value = "";        
+        document.getElementById("rfidInput").value = "";
 
         fetch(`http://localhost:3000/id/${key}/${rfidInput}`)
             .then(response => response.json())
@@ -51,7 +53,11 @@ document
                 displayJsonEntryAsTable(Artikel);
                 displayImageAsTable(Artikel);
             })
-            .catch(error => console.error('Fehler beim Abrufen der Daten:', error));
+            .catch(error => console.error('Fehler beim Abrufen der Daten:', error))
+            .finally(() => {
+                // Fortschrittsbalken ausblenden unabhängig vom Erfolg oder Fehler
+                hideProgressBar();
+            });
     });
 
 // ID-1 Button Suchen mit ID
@@ -62,6 +68,9 @@ document
         // Hole den eingegebenen ID
         let key = "ID"
         let idInput = document.getElementById("idInput").value;
+
+        // Fortschrittsbalken anzeigen
+        showProgressBar();
 
         // Leere das Eingabefeld nach dem Auslesen
         document.getElementById("idInput").value = "";
@@ -75,7 +84,11 @@ document
                 displayJsonEntryAsTable(Artikel);
                 displayImageAsTable(Artikel);
             })
-            .catch(error => console.error('Fehler beim Abrufen der Daten:', error));
+            .catch(error => console.error('Fehler beim Abrufen der Daten:', error))
+            .finally(() => {
+                // Fortschrittsbalken ausblenden unabhängig vom Erfolg oder Fehler
+                hideProgressBar();
+            });
     });
 
 // Füge einen Event Listener zum Gewichts-Button hinzu
@@ -156,11 +169,26 @@ document.getElementById("saveButtonID").addEventListener("click", function () {
             },
             body: JSON.stringify(Artikel),
         })
+            .then(() => hideProgressBar());
 
     } else {
         console.log("Fehler beim Speichern des Artikels");
     }
 });
+
+
+// PRO-01 Fortschrittsbalken ON/OFF
+// --------------------------------------------------------
+// Function to show the progress bar
+function showProgressBar() {
+    document.getElementById('progress-container').style.display = 'block';
+}
+
+// Function to hide the progress bar
+function hideProgressBar() {
+    document.getElementById('progress-container').style.display = 'none';
+}
+
 
 // Funktion zum Anzeigen des Bildes in der Tabelle
 function displayImageAsTable(entry) {
