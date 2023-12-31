@@ -24,9 +24,9 @@ app.listen(3000, () => {
 
 // MongoDB-Verbindungsinformationen
 const url = 'mongodb+srv://wlwProjekt:E-_xiV$9QCUnadP@inventar1.dmggykc.mongodb.net/InventarListe_v1'; // Verbindungsserver
-const databaseName = 'InventarListe_v1'; // Datenbankname
-const collectionName = 'Liste1'; // Sammlungsname
-
+const databaseName = 'InventarListe_v1';    // Datenbankname
+const collectionName = 'Liste1';            // Sammlungsname
+const collectionNameImages = 'images';      // Sammlungsname
 
 // Erstellen eines MongoClient mit einem MongoClientOptions-Objekt, um die Stable-API-Version festzulegen
 const client = new MongoClient(url, {
@@ -34,48 +34,43 @@ const client = new MongoClient(url, {
         version: ServerApiVersion.v1,
         strict: true,
         deprecationErrors: true,
+        useUnifiedTopology: true,
     }
 });
 
 
-// SAVE-3 Eintrag aktualisieren oder neu einfügen
-// --------------------------------------------------------
-async function runWriteData(data) {
+// Connect to MongoDB
+async function connectToMongo() {
     try {
-        // Client mit dem Server verbinden (optional ab v4.7)
         await client.connect();
-        // Senden eines Pings zur Bestätigung einer erfolgreichen Verbindung
+        console.log('Connected to MongoDB');
         await client.db("admin").command({ ping: 1 });
         console.log("Ping an Ihre Bereitstellung gesendet. Sie haben erfolgreich eine Verbindung zu MongoDB hergestellt!");
-        // Daten in die MongoDB aktualisieren oder einfügen.
-        await insertOrUpdateData(client, data);
-    } finally {
-        // Stellt sicher, dass der Client geschlossen wird, wenn Sie fertig sind/fehlschlagen
-        await client.close();
+    } catch (error) {
+        console.error('Error connecting to MongoDB:', error);
     }
 }
 
-
-// ID-3. Verbindung zu MongoDB herstellen - Suchen mit ID
-// --------------------------------------------------------
-async function runReadDataID(key, id) {
+// Funktion zum Schließen der MongoDB-Verbindung
+async function closeMongoConnection() {
     try {
-        // Client mit dem Server verbinden (optional ab v4.7)
-        await client.connect();
-        // Senden eines Pings zur Bestätigung einer erfolgreichen Verbindung
-        await client.db("admin").command({ ping: 1 });
-        console.log("Ping an MongoDB gesendet. Sie haben erfolgreich eine Verbindung zu MongoDB hergestellt!");
-
-        // Daten aus der MongoDB abrufen und auf der Konsole ausgeben
-        const result = await fetchDataFromDatabaseID(client, key, id);
-
-        // Das Ergebnis zurückgeben
-        return result;
-    } finally {
-        // Stellt sicher, dass der Client geschlossen wird, wenn Sie fertig sind/fehlschlagen
         await client.close();
+        console.log('Connection to MongoDB closed');
+    } catch (error) {
+        console.error('Error closing MongoDB connection:', error);
+        throw error; // Wir werfen den Fehler, damit er im aufrufenden Code behandelt werden kann
     }
 }
+
+// Am Ende des Programms (beim Herunterfahren des Servers) die Verbindung schließen
+process.on('SIGINT', async () => {
+    console.log('Caught interrupt signal');
+    await closeMongoConnection();
+    server.close(() => {
+        console.log('Express server closed');
+        process.exit();
+    });
+});
 
 // SAVE-4 Daten in die MongoDB einfügen oder aktualisieren
 // --------------------------------------------------------
@@ -119,6 +114,57 @@ async function fetchDataFromDatabaseID(client, key, value) {
 }
 
 
+// PIX-01 Download Images from MongoDB
+// --------------------------------------------------------
+async function downloadImage(documentNameToDownload, savePath) {
+    const database = client.db(databaseName);
+    const collection = database.collection(collectionNameImages);
+    try {
+
+        const letzterPunktIndex = documentNameToDownload.lastIndexOf(".");
+
+        // Überprüfe, ob ein Punkt gefunden wurde und er nicht am Anfang oder Ende des Strings liegt
+        if (letzterPunktIndex !== -1 && letzterPunktIndex !== 0 && letzterPunktIndex !== documentNameToDownload.length - 1) {
+            // Extrahiere den Teil des Strings vor dem letzten Punkt
+            documentNameToDownload = documentNameToDownload.slice(0, letzterPunktIndex);
+        }
+
+        // Find the document by its name
+        const document = await collection.findOne({ image_name: documentNameToDownload });
+
+        if (document) {
+            // Get the image data from the document
+
+            const imageData = Buffer.from(document.image_data.buffer); // Convert Binary to Buffer
+
+            // Save the image data to a file with the image_name as the filename
+            const savePathWithFilename = savePath + document.image_name + '.png';
+            const fs = await import('fs/promises');
+            // Stelle sicher, dass das Verzeichnis existiert
+            await fs.mkdir(savePath, { recursive: true });
+            await fs.writeFile(savePathWithFilename, imageData);
+
+            console.log(`Image downloaded to ${savePathWithFilename}`);
+        } else {
+            console.log(`Document with name ${documentNameToDownload} not found.`);
+        }
+    } catch (error) {
+        console.error('Error downloading image:', error);
+    }
+}
+
+// Replace 'Hubschrauber' with the actual name of the document you want to download
+const documentNameToDownload = '404_nod_found';
+// Replace '/home/cholbuc/Downloads/testBild/' with the desired save path
+const savePath = 'src/static/PNG/';
+
+// Call the functions
+//connectToMongo().then(() => downloadImage(documentNameToDownload, savePath));
+
+
+
+
+
 // Schnittstele Server <-> Client
 //----------------------------------------------------------
 
@@ -132,7 +178,11 @@ app.get('/id/:key/:id', async (req, res) => {
         const key = req.params.key;
 
         // Daten aus der Datenbank abrufen
-        const data = await runReadDataID(key, id);
+        await connectToMongo(); // Warten, bis die Verbindung hergestellt ist
+        const data = await fetchDataFromDatabaseID(client, key, id);
+        //await downloadImage(documentNameToDownload, savePath);
+        await downloadImage(data.Foto_ID, savePath);
+        await downloadImage(data.Zeichnung_ID, savePath);
 
         delete data._id;
         // Daten an den Client senden
@@ -156,8 +206,8 @@ app.post('/save', async (req, res) => {
         console.log(artikel);
 
         // Daten aus der Datenbank abrufen
-        //await runWriteData(artikel);
-        runWriteData(artikel).catch(console.dir);
+        await connectToMongo(); // Warten, bis die Verbindung hergestellt ist
+        await insertOrUpdateData(client, artikel);
 
         // Daten an den Client senden
         res.json("OK");
@@ -172,31 +222,8 @@ app.post('/save', async (req, res) => {
 
 
 
-// DEBUG
-// ----------------------------------------------------------------------------
-/*
-// Beispielaufruf mit den aktualisierten Daten
-const newData = {
-    "ID": 10001005,
-    "RFID_TAG": 7,
-    "Datum_Erstellt": "01.11.2000 11:28",
-    "Datum_Geaendert": "22.09.2023 99:99",
-    "Lager_Ort": "Balsthal",
-    "Lager_Platz": "Schrank 03",
-    "Lager_Position": "A05",
-    "Lager_Behälter": "AUER",
-    "Gewicht_Behälter": 65,
-    "Gewicht_Artikel": 10,
-    "Anzahl_Artikel": 129,
-    "Foto_ID": "Schraube.jpg",
-    "Zeichnung_ID": "Schraube.png",
-    "Artikel_Kategorie": "Schraube",
-    "Artikel_Name": "Zylinderschraube mit Innensechskant",
-    "Print_Name": "M3x20"
-};
 
 
-//runWriteData(newData).catch(console.dir);
-//runReadDataID(10001005).catch(console.dir);
 
-*/
+
+

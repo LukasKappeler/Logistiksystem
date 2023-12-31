@@ -52,6 +52,7 @@ document
                 Artikel = data;
                 displayJsonEntryAsTable(Artikel);
                 displayImageAsTable(Artikel);
+   
             })
             .catch(error => console.error('Fehler beim Abrufen der Daten:', error))
             .finally(() => {
@@ -220,6 +221,9 @@ function createImage(src, alt) {
     //img.height = 200; // Höhe des Bildes
     return img;
 }
+
+
+
 
 
 
