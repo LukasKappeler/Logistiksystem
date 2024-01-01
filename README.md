@@ -1,4 +1,25 @@
-# Logistiksystem
+# Logistikterminal
+
+Mit dem Logistikterminal wird ein weiterer kleiner Teil eines großen Logistikverwaltungsprojekts erstellt. Es dient dazu, die Anzahl der einzulagernden Komponenten zu erfassen, inklusive Foto, und direkt in die Datenbank zu speichern. Im Rahmen des WLW-Projekts wurde bisher nur der Teil mit dem Lesen und Schreiben der Daten in die Datenbank realisiert.
+
+![Client zeigt einen Artikel an.](Images/client01.png)
+
+## Allgemeine Funktionsweise der Applikation ![Projektübersicht WLW](Images/Projekt_Uebersicht_wlw.png)
+
+## kurze Beschreibung aller serverseitigen API Endpoints
+
+## Beschreibung des Source Codes und Funktionsweise des Clients
+
+## Hardwareanbindung ist nicht zwingend erforderlich
+
+
+
+
+
+
+
+
+
 
 ## Installation Raspberry Pi
 

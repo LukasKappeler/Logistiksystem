@@ -25,8 +25,9 @@ app.listen(3000, () => {
 // MongoDB-Verbindungsinformationen
 const url = 'mongodb+srv://wlwProjekt:E-_xiV$9QCUnadP@inventar1.dmggykc.mongodb.net/InventarListe_v1'; // Verbindungsserver
 const databaseName = 'InventarListe_v1';    // Datenbankname
-const collectionName = 'Liste1';            // Sammlungsname
-const collectionNameImages = 'images';      // Sammlungsname
+const collectionName = 'Liste1';            // Sammlungsname Artikel
+const collectionNameImages = 'images';      // Sammlungsname Bilder
+const savePath = 'src/static/PNG/';         // Speicherort Bilder
 
 // Erstellen eines MongoClient mit einem MongoClientOptions-Objekt, um die Stable-API-Version festzulegen
 const client = new MongoClient(url, {
@@ -152,17 +153,6 @@ async function downloadImage(documentNameToDownload, savePath) {
         console.error('Error downloading image:', error);
     }
 }
-
-// Replace 'Hubschrauber' with the actual name of the document you want to download
-const documentNameToDownload = '404_nod_found';
-// Replace '/home/cholbuc/Downloads/testBild/' with the desired save path
-const savePath = 'src/static/PNG/';
-
-// Call the functions
-//connectToMongo().then(() => downloadImage(documentNameToDownload, savePath));
-
-
-
 
 
 // Schnittstele Server <-> Client
