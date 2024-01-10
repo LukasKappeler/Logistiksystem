@@ -1,33 +1,16 @@
+// --------------------------------------------------------
+// --- Variablen
+// --------------------------------------------------------
+
 // Ausgelesenen Artikel
 let Artikel;
+
 // Pfad zum Bilderverzeichnis
 let Pfad = "../PNG/";
 
-// Funktion zum Anzeigen eines JSON-Eintrags in einer Tabelle
-function displayJsonEntryAsTable(entry) {
-    let tableElement = document.getElementById("jsonTable");
-
-    // Lösche vorhandene Zeilen in der Tabelle
-    while (tableElement.rows.length > 0) {
-        tableElement.deleteRow(0);
-    }
-
-    // Erstelle eine Zeile für jeden Schlüssel-Wert-Eintrag
-    for (let key in entry) {
-        let row = tableElement.insertRow();
-
-        // Erstelle Zellen für Schlüssel und Wert
-        let keyCell = row.insertCell(0);
-        let valueCell = row.insertCell(1);
-
-        // Setze Schlüssel und Wert in die Zellen
-        keyCell.textContent = key;
-        valueCell.textContent = entry[key];
-        // Macht den Text der 1. Zeile Bold
-        keyCell.style.fontWeight = "bold";
-        keyCell.style.width = "150px";
-    }
-}
+// --------------------------------------------------------
+// --- document
+// --------------------------------------------------------
 
 // ID-1 Button Suchen mit RFID_TAG
 // --------------------------------------------------------
@@ -92,7 +75,8 @@ document
             });
     });
 
-// Füge einen Event Listener zum Gewichts-Button hinzu
+// GE-01 Füge einen Event Listener zum Gewichts-Button hinzu
+//---------------------------------------------------------
 document
     .getElementById("entryButtonWeight")
     .addEventListener("click", function () {
@@ -177,21 +161,53 @@ document.getElementById("saveButtonID").addEventListener("click", function () {
     }
 });
 
+// --------------------------------------------------------
+// --- function
+// --------------------------------------------------------
 
-// PRO-01 Fortschrittsbalken ON/OFF
+// Funktion zum Anzeigen eines JSON-Eintrags in einer Tabelle
+// --------------------------------------------------------
+function displayJsonEntryAsTable(entry) {
+    let tableElement = document.getElementById("jsonTable");
+
+    // Lösche vorhandene Zeilen in der Tabelle
+    while (tableElement.rows.length > 0) {
+        tableElement.deleteRow(0);
+    }
+
+    // Erstelle eine Zeile für jeden Schlüssel-Wert-Eintrag
+    for (let key in entry) {
+        let row = tableElement.insertRow();
+
+        // Erstelle Zellen für Schlüssel und Wert
+        let keyCell = row.insertCell(0);
+        let valueCell = row.insertCell(1);
+
+        // Setze Schlüssel und Wert in die Zellen
+        keyCell.textContent = key;
+        valueCell.textContent = entry[key];
+        // Macht den Text der 1. Zeile Bold
+        keyCell.style.fontWeight = "bold";
+        keyCell.style.width = "150px";
+    }
+}
+
+// PRO-01 Fortschrittsbalken ON
 // --------------------------------------------------------
 // Function to show the progress bar
 function showProgressBar() {
     document.getElementById('progress-container').style.display = 'block';
 }
 
+// PRO-02 Fortschrittsbalken OFF
+// --------------------------------------------------------
 // Function to hide the progress bar
 function hideProgressBar() {
     document.getElementById('progress-container').style.display = 'none';
 }
 
-
-// Funktion zum Anzeigen des Bildes in der Tabelle
+// BILD-01 Funktion zum Anzeigen des Bildes in der Tabelle
+// --------------------------------------------------------
 function displayImageAsTable(entry) {
     let bildElement = document.getElementById("jsonBild");
 
@@ -212,13 +228,13 @@ function displayImageAsTable(entry) {
     bildElement.append(bildZeichnung);
 }
 
-// Funktion zum Erstellen eines Bild-Elements
+// BILD-02 Funktion zum Erstellen eines Bild-Elements
+// --------------------------------------------------------
 function createImage(src, alt) {
     var img = document.createElement("img");
     img.src = src;
     img.alt = alt;
     img.width = 365; // Breite des Bildes
-    //img.height = 200; // Höhe des Bildes
     return img;
 }
 

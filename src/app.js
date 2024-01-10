@@ -6,6 +6,9 @@ import { dirname } from 'path';
 import path from 'path';
 import { MongoClient, ServerApiVersion } from 'mongodb';
 
+// ----------------------------------------------------
+// Server
+// ----------------------------------------------------
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -18,7 +21,7 @@ app.listen(3000, () => {
     console.log("App lauscht auf Port 3000");
 });
 
-
+// ----------------------------------------------------------------
 // MongoDB
 // ----------------------------------------------------------------
 
@@ -29,7 +32,8 @@ const collectionName = 'Liste1';            // Sammlungsname Artikel
 const collectionNameImages = 'images';      // Sammlungsname Bilder
 const savePath = 'src/static/PNG/';         // Speicherort Bilder
 
-// Erstellen eines MongoClient mit einem MongoClientOptions-Objekt, um die Stable-API-Version festzulegen
+// MONGO-01 Erstellen eines MongoClient mit einem MongoClientOptions-Objekt, um die Stable-API-Version festzulegen
+// --------------------------------------------------------
 const client = new MongoClient(url, {
     serverApi: {
         version: ServerApiVersion.v1,
@@ -39,8 +43,8 @@ const client = new MongoClient(url, {
     }
 });
 
-
-// Connect to MongoDB
+// MONGO-02 Connect to MongoDB
+// --------------------------------------------------------
 async function connectToMongo() {
     try {
         await client.connect();
@@ -52,7 +56,8 @@ async function connectToMongo() {
     }
 }
 
-// Funktion zum Schließen der MongoDB-Verbindung
+// MONGO-03 Funktion zum Schließen der MongoDB-Verbindung
+// --------------------------------------------------------
 async function closeMongoConnection() {
     try {
         await client.close();
@@ -63,7 +68,8 @@ async function closeMongoConnection() {
     }
 }
 
-// Am Ende des Programms (beim Herunterfahren des Servers) die Verbindung schließen
+// MONGO-04 Am Ende des Programms (beim Herunterfahren des Servers) die Verbindung schließen
+// --------------------------------------------------------
 process.on('SIGINT', async () => {
     console.log('Caught interrupt signal');
     await closeMongoConnection();
@@ -114,7 +120,6 @@ async function fetchDataFromDatabaseID(client, key, value) {
     return result;
 }
 
-
 // PIX-01 Download Images from MongoDB
 // --------------------------------------------------------
 async function downloadImage(documentNameToDownload, savePath) {
@@ -154,10 +159,9 @@ async function downloadImage(documentNameToDownload, savePath) {
     }
 }
 
-
+//----------------------------------------------------------
 // Schnittstele Server <-> Client
 //----------------------------------------------------------
-
 
 // ID-2 Request von Client Suchen in Datenbank mit ID / RFID
 // --------------------------------------------------------
@@ -184,7 +188,6 @@ app.get('/id/:key/:id', async (req, res) => {
     }
 });
 
-
 // SAVE-2 Speichern des Artikels in der Datenbank
 // --------------------------------------------------------
 app.post('/save', async (req, res) => {
@@ -207,13 +210,3 @@ app.post('/save', async (req, res) => {
         res.status(500).json({ error: 'Interner Serverfehler' });
     }
 });
-
-
-
-
-
-
-
-
-
-

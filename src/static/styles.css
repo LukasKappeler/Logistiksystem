@@ -14,7 +14,6 @@ body {
     background-color: rgb(230, 226, 40);
 }
 
-
 #artikelList {
     position: absolute;
     width: 385px;
@@ -42,10 +41,6 @@ body {
     border-radius: 10px;
     background-color: #bfff0e;
 }
-
-
-
-
 
 /* ID Suche **/
 #search-container-id {
