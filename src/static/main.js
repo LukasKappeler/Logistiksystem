@@ -75,7 +75,7 @@ document
             });
     });
 
-// GE-01 Füge einen Event Listener zum Gewichts-Button hinzu
+// GE-01 Button eingabe des Gewichtes
 //---------------------------------------------------------
 document
     .getElementById("entryButtonWeight")
