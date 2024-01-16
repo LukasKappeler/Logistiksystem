@@ -26,7 +26,7 @@ app.listen(3000, () => {
 // ----------------------------------------------------------------
 
 // MongoDB-Verbindungsinformationen
-const url = 'mongodb+srv://wlwProjekt:E-_xiV$9QCUnadP@inventar1.dmggykc.mongodb.net/InventarListe_v1'; // Verbindungsserver
+const url = ''; // Verbindungsserver
 const databaseName = 'InventarListe_v1';    // Datenbankname
 const collectionName = 'Liste1';            // Sammlungsname Artikel
 const collectionNameImages = 'images';      // Sammlungsname Bilder
